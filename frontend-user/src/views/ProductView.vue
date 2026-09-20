@@ -120,6 +120,7 @@
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SectionTitle from '@/components/SectionTitle.vue'
+import { PRODUCT_IDS } from '@/config/products.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -244,6 +245,14 @@ const products = [
 ]
 
 const activeTab = ref('wms')
+
+// 跨页链接基线：统一配置中登记的产品入口必须在本页真实存在，
+// 否则首页 ?tab=xxx 的入口会指向空锚点。构建期配置校验 + 此处运行期守卫双保险。
+const productIdsOnPage = new Set(products.map((product) => product.id))
+const missingTargets = PRODUCT_IDS.filter((id) => !productIdsOnPage.has(id))
+if (missingTargets.length > 0) {
+  throw new Error(`产品页缺少统一配置登记的产品入口：${missingTargets.join(', ')}`)
+}
 
 const activeProduct = computed(() => {
   return products.find(p => p.id === activeTab.value) || products[0]

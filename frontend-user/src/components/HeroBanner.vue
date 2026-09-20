@@ -8,35 +8,30 @@
     <div class="container">
       <div class="hero-content">
         <h1 class="hero-title animate-fadeInUp">
-          <span class="highlight">智慧物流</span>
+          <span class="highlight">{{ hero.title.highlight }}</span>
           <br />
-          让供应链更高效
+          {{ hero.title.rest }}
         </h1>
         <p class="hero-desc animate-fadeInUp" style="animation-delay: 0.2s">
-          广州知运信息技术有限公司专注于智慧物流系统解决方案，
-          为企业提供仓储管理、运输调度、配送优化等一站式数字化服务
+          {{ hero.description }}
         </p>
         <div class="hero-actions animate-fadeInUp" style="animation-delay: 0.4s">
-          <el-button type="primary" size="large" round @click="$router.push('/products')">
-            了解产品
-            <el-icon class="el-icon--right"><ArrowRight /></el-icon>
-          </el-button>
-          <el-button size="large" round @click="$router.push('/contact')">
-            免费咨询
+          <el-button
+            v-for="action in hero.actions"
+            :key="action.key"
+            :type="action.type === 'primary' ? 'primary' : ''"
+            size="large"
+            round
+            @click="$router.push(action.link)"
+          >
+            {{ action.label }}
+            <el-icon v-if="action.key === 'learn-products'" class="el-icon--right"><ArrowRight /></el-icon>
           </el-button>
         </div>
         <div class="hero-stats animate-fadeInUp" style="animation-delay: 0.6s">
-          <div class="stat-item">
-            <span class="stat-value">500+</span>
-            <span class="stat-label">服务客户</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">99.9%</span>
-            <span class="stat-label">系统稳定性</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">30%</span>
-            <span class="stat-label">效率提升</span>
+          <div class="stat-item" v-for="stat in heroStats" :key="stat.id">
+            <span class="stat-value">{{ stat.value }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -45,6 +40,17 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { HERO, STATS } from '@/config/home.js'
+
+// 内容来源固化为统一配置：品牌概览文案、入口链接与主视觉指标均不在组件内硬编码
+const hero = HERO
+
+const heroStats = computed(() =>
+  hero.statIds
+    .map((id) => STATS.find((stat) => stat.id === id))
+    .filter((stat) => Boolean(stat))
+)
 </script>
 
 <style lang="scss" scoped>
@@ -70,7 +76,7 @@
   position: absolute;
   border-radius: 50%;
   opacity: 0.1;
-  
+
   &.shape-1 {
     width: 600px;
     height: 600px;
@@ -78,7 +84,7 @@
     top: -200px;
     right: -100px;
   }
-  
+
   &.shape-2 {
     width: 400px;
     height: 400px;
@@ -86,7 +92,7 @@
     bottom: -100px;
     left: -100px;
   }
-  
+
   &.shape-3 {
     width: 300px;
     height: 300px;
@@ -107,7 +113,7 @@
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: $spacing-lg;
-  
+
   .highlight {
     background: linear-gradient(90deg, $primary-color, $primary-light);
     -webkit-background-clip: text;
@@ -127,7 +133,7 @@
   display: flex;
   gap: $spacing-md;
   margin-bottom: $spacing-xxl;
-  
+
   .el-button {
     padding: 12px 32px;
     font-size: $font-size-base;
@@ -160,11 +166,11 @@
   .hero-title {
     font-size: 40px;
   }
-  
+
   .hero-stats {
     gap: $spacing-xl;
   }
-  
+
   .stat-value {
     font-size: 28px;
   }
@@ -175,31 +181,31 @@
     min-height: auto;
     padding: $spacing-xxl 0;
   }
-  
+
   .hero-title {
     font-size: 32px;
   }
-  
+
   .hero-desc {
     font-size: $font-size-base;
   }
-  
+
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
-    
+
     .el-button {
       width: 100%;
       margin: 0;
       justify-content: center;
     }
   }
-  
+
   .hero-stats {
     flex-wrap: wrap;
     gap: $spacing-lg;
   }
-  
+
   .stat-item {
     flex: 1;
     min-width: 100px;

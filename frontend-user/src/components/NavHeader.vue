@@ -7,14 +7,14 @@
       </router-link>
       
       <nav class="nav-menu" :class="{ 'nav-open': menuOpen }">
-        <router-link 
-          v-for="item in menuItems" 
+        <router-link
+          v-for="item in menuItems"
           :key="item.path"
           :to="item.path"
           class="nav-item"
           @click="menuOpen = false"
         >
-          {{ item.name }}
+          {{ item.title }}
         </router-link>
       </nav>
       
@@ -34,14 +34,9 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { NAV_ITEMS } from '@/config/routes.js'
 
-const menuItems = [
-  { name: '首页', path: '/' },
-  { name: '关于我们', path: '/about' },
-  { name: '产品服务', path: '/products' },
-  { name: '案例展示', path: '/cases' },
-  { name: '联系我们', path: '/contact' }
-]
+const menuItems = NAV_ITEMS
 
 const isScrolled = ref(false)
 const menuOpen = ref(false)

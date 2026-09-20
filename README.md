@@ -24,8 +24,14 @@ npm install
 # 启动开发服务器
 npm run dev
 
-# 构建生产版本
+# 构建生产版本（先执行首页配置校验，不通过则构建失败）
 npm run build
+
+# 首页统一配置校验（区块顺序 / 链接 / 元数据 / 数据完整性）
+npm run validate:home
+
+# 校验器失败场景自测
+npm run test:config
 ```
 
 ## 2. Services
@@ -62,6 +68,11 @@ npm run build
 │   │   │   └── SectionTitle.vue  # 区块标题
 │   │   ├── router/               # 路由配置
 │   │   │   └── index.js
+│   │   ├── config/               # 统一配置（首页内容、路由、产品、站点元数据）
+│   │   │   ├── home.js
+│   │   │   ├── routes.js
+│   │   │   ├── products.js
+│   │   │   └── site.js
 │   │   ├── views/                # 页面视图
 │   │   │   ├── HomeView.vue      # 首页
 │   │   │   ├── AboutView.vue     # 关于我们
@@ -70,6 +81,7 @@ npm run build
 │   │   │   └── ContactView.vue   # 联系我们
 │   │   ├── App.vue               # 根组件
 │   │   └── main.js               # 入口文件
+│   ├── scripts/                  # 配置校验器与 Vite 校验插件
 │   ├── Dockerfile                # Docker构建文件
 │   ├── nginx.conf                # Nginx配置
 │   ├── package.json              # 依赖配置

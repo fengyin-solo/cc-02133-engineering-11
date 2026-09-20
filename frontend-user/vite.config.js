@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import homeConfigPlugin from './scripts/vite-plugin-home-config.js'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), homeConfigPlugin()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')

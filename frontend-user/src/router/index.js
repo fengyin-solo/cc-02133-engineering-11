@@ -1,37 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ROUTES } from '@/config/routes.js'
+import { SITE } from '@/config/site.js'
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/HomeView.vue'),
-    meta: { title: '首页' }
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/views/AboutView.vue'),
-    meta: { title: '关于我们' }
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: () => import('@/views/ProductView.vue'),
-    meta: { title: '产品服务' }
-  },
-  {
-    path: '/cases',
-    name: 'Cases',
-    component: () => import('@/views/CaseView.vue'),
-    meta: { title: '案例展示' }
-  },
-  {
-    path: '/contact',
-    name: 'Contact',
-    component: () => import('@/views/ContactView.vue'),
-    meta: { title: '联系我们' }
-  }
-]
+const viewModules = {
+  Home: () => import('@/views/HomeView.vue'),
+  About: () => import('@/views/AboutView.vue'),
+  Products: () => import('@/views/ProductView.vue'),
+  Cases: () => import('@/views/CaseView.vue'),
+  Contact: () => import('@/views/ContactView.vue')
+}
+
+const routes = ROUTES.map((route) => ({
+  path: route.path,
+  name: route.name,
+  component: viewModules[route.name],
+  meta: { title: route.title }
+}))
 
 const router = createRouter({
   history: createWebHistory(),
@@ -48,7 +32,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = `${to.meta.title} - 广州知运信息技术有限公司`
+  document.title = SITE.pageTitleTemplate.replace('%s', to.meta.title)
   next()
 })
 
