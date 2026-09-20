@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-banner">
+  <section class="hero-banner" data-section="hero">
     <div class="hero-bg">
       <div class="bg-shape shape-1"></div>
       <div class="bg-shape shape-2"></div>
@@ -8,35 +8,30 @@
     <div class="container">
       <div class="hero-content">
         <h1 class="hero-title animate-fadeInUp">
-          <span class="highlight">智慧物流</span>
+          <span class="highlight">{{ hero.titleHighlight }}</span>
           <br />
-          让供应链更高效
+          {{ hero.titleTail }}
         </h1>
         <p class="hero-desc animate-fadeInUp" style="animation-delay: 0.2s">
-          广州知运信息技术有限公司专注于智慧物流系统解决方案，
-          为企业提供仓储管理、运输调度、配送优化等一站式数字化服务
+          {{ hero.description }}
         </p>
         <div class="hero-actions animate-fadeInUp" style="animation-delay: 0.4s">
-          <el-button type="primary" size="large" round @click="$router.push('/products')">
-            了解产品
-            <el-icon class="el-icon--right"><ArrowRight /></el-icon>
-          </el-button>
-          <el-button size="large" round @click="$router.push('/contact')">
-            免费咨询
+          <el-button
+            v-for="action in hero.actions"
+            :key="action.label"
+            :type="action.type === 'primary' ? 'primary' : undefined"
+            size="large"
+            round
+            @click="$router.push(action.link)"
+          >
+            {{ action.label }}
+            <el-icon v-if="action.type === 'primary'" class="el-icon--right"><ArrowRight /></el-icon>
           </el-button>
         </div>
         <div class="hero-stats animate-fadeInUp" style="animation-delay: 0.6s">
-          <div class="stat-item">
-            <span class="stat-value">500+</span>
-            <span class="stat-label">服务客户</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">99.9%</span>
-            <span class="stat-label">系统稳定性</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">30%</span>
-            <span class="stat-label">效率提升</span>
+          <div class="stat-item" v-for="stat in heroStats" :key="stat.id">
+            <span class="stat-value">{{ stat.value }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
           </div>
         </div>
       </div>
@@ -45,6 +40,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { home } from '@/config/site.config'
+
+const { hero, stats } = home
+
+// 主视觉概览统计与中部数据带共用 home.stats 同一来源，仅按 hero.statIds 取项
+const heroStats = computed(() =>
+  hero.statIds.map((id) => stats.items.find((item) => item.id === id))
+)
 </script>
 
 <style lang="scss" scoped>

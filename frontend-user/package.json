@@ -4,7 +4,10 @@
   "description": "广州知运信息技术有限公司官网",
   "type": "module",
   "scripts": {
+    "validate-config": "node scripts/validate-site-config.mjs",
+    "predev": "node scripts/validate-site-config.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/validate-site-config.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -3,7 +3,7 @@
     <div class="container flex-between">
       <router-link to="/" class="logo">
         <div class="logo-icon">知</div>
-        <span class="logo-text">广州知运信息技术</span>
+        <span class="logo-text">{{ site.shortName }}</span>
       </router-link>
       
       <nav class="nav-menu" :class="{ 'nav-open': menuOpen }">
@@ -34,14 +34,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { nav, site } from '@/config/site.config'
 
-const menuItems = [
-  { name: '首页', path: '/' },
-  { name: '关于我们', path: '/about' },
-  { name: '产品服务', path: '/products' },
-  { name: '案例展示', path: '/cases' },
-  { name: '联系我们', path: '/contact' }
-]
+// 导航入口由统一配置提供，与 router 共用同一份数据
+const menuItems = nav
 
 const isScrolled = ref(false)
 const menuOpen = ref(false)

@@ -1,37 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { nav, site } from '@/config/site.config'
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/HomeView.vue'),
-    meta: { title: '首页' }
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/views/AboutView.vue'),
-    meta: { title: '关于我们' }
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: () => import('@/views/ProductView.vue'),
-    meta: { title: '产品服务' }
-  },
-  {
-    path: '/cases',
-    name: 'Cases',
-    component: () => import('@/views/CaseView.vue'),
-    meta: { title: '案例展示' }
-  },
-  {
-    path: '/contact',
-    name: 'Contact',
-    component: () => import('@/views/ContactView.vue'),
-    meta: { title: '联系我们' }
-  }
-]
+/**
+ * 路由表由统一配置 site.config.js 的 nav 唯一生成，
+ * 禁止在此处另写路径或标题，避免导航、页脚、校验器出现不一致。
+ */
+const viewModules = {
+  HomeView: () => import('@/views/HomeView.vue'),
+  AboutView: () => import('@/views/AboutView.vue'),
+  ProductView: () => import('@/views/ProductView.vue'),
+  CaseView: () => import('@/views/CaseView.vue'),
+  ContactView: () => import('@/views/ContactView.vue')
+}
+
+const routes = nav.map((item) => ({
+  path: item.path,
+  name: item.view,
+  component: viewModules[item.view],
+  meta: { title: item.title }
+}))
 
 const router = createRouter({
   history: createWebHistory(),
@@ -48,7 +35,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = `${to.meta.title} - 广州知运信息技术有限公司`
+  document.title = `${to.meta.title} - ${site.name}`
   next()
 })
 
